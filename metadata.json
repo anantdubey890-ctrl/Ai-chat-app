@@ -1,0 +1,9 @@
+{
+  "name": "MimicChat AI",
+  "description": "An AI-powered WhatsApp-like chat application that learns your personality to suggest human-like replies.",
+  "requestFramePermissions": [
+    "camera",
+    "microphone",
+    "geolocation"
+  ]
+}
