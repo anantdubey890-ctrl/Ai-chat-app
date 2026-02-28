@@ -25,7 +25,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   const login = async (name: string, phone: string) => {
-    const id = `user-${Date.now()}`;
+    // Check if user already exists in local storage to keep same ID
+    const stored = localStorage.getItem('mimic_user');
+    let id = stored ? JSON.parse(stored).id : `user-${Date.now()}`;
+    
     const newUser: User = {
       id,
       name,

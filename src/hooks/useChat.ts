@@ -15,7 +15,7 @@ export function useChat(chatId: string | null) {
       try {
         const [msgs, chats] = await Promise.all([
           api.getMessages(chatId),
-          api.getChats('all') // Simplified for now, or fetch specific chat
+          api.getChats('all') // We'll filter in the UI or fetch specific
         ]);
         setMessages(msgs);
         const currentChat = chats.find(c => c.id === chatId);
@@ -99,8 +99,13 @@ export function useChatList(userId: string | null) {
     loadChats();
 
     const handleGlobalMessage = (msg: Message) => {
-      // Update chat list when a message arrives
       setChats(prev => {
+        const chatExists = prev.find(c => c.id === msg.chatId);
+        if (!chatExists) {
+          // If it's a new chat, we might need to reload the list
+          loadChats();
+          return prev;
+        }
         return prev.map(c => {
           if (c.id === msg.chatId) {
             return { ...c, lastMessage: msg, updatedAt: msg.timestamp };

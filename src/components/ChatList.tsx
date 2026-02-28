@@ -94,33 +94,38 @@ export default function ChatList({ onSelectChat }: { onSelectChat: () => void })
             <div className="w-6 h-6 border-2 border-[#00a884] border-t-transparent rounded-full animate-spin"></div>
           </div>
         ) : (
-          chats.map((chat) => (
-            <div 
-              key={chat.id}
-              onClick={() => {
-                navigate(`/chat/${chat.id}`);
-                onSelectChat();
-              }}
-              className="flex items-center px-4 py-3 hover:bg-[#202c33] cursor-pointer border-b border-[#222d34] transition-colors"
-            >
-              <img 
-                src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${chat.id}`} 
-                alt="Chat" 
-                className="w-12 h-12 rounded-full mr-4"
-              />
-              <div className="flex-1 min-w-0">
-                <div className="flex justify-between items-baseline">
-                  <h3 className="text-[#e9edef] font-medium truncate">Chat with {chat.id.slice(0, 5)}</h3>
-                  <span className="text-[11px] text-[#8696a0]">
-                    {chat.updatedAt ? format(chat.updatedAt, 'HH:mm') : ''}
-                  </span>
+          chats.map((chat) => {
+            const otherParticipantId = chat.participants.find(p => p !== user?.id);
+            return (
+              <div 
+                key={chat.id}
+                onClick={() => {
+                  navigate(`/chat/${chat.id}`);
+                  onSelectChat();
+                }}
+                className="flex items-center px-4 py-3 hover:bg-[#202c33] cursor-pointer border-b border-[#222d34] transition-colors"
+              >
+                <img 
+                  src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${otherParticipantId || chat.id}`} 
+                  alt="Chat" 
+                  className="w-12 h-12 rounded-full mr-4"
+                />
+                <div className="flex-1 min-w-0">
+                  <div className="flex justify-between items-baseline">
+                    <h3 className="text-[#e9edef] font-medium truncate">
+                      {otherParticipantId ? `User ${otherParticipantId.slice(-4)}` : 'Unknown'}
+                    </h3>
+                    <span className="text-[11px] text-[#8696a0]">
+                      {chat.updatedAt ? format(chat.updatedAt, 'HH:mm') : ''}
+                    </span>
+                  </div>
+                  <p className="text-sm text-[#8696a0] truncate">
+                    {chat.lastMessage?.text || 'No messages yet'}
+                  </p>
                 </div>
-                <p className="text-sm text-[#8696a0] truncate">
-                  {chat.lastMessage?.text || 'No messages yet'}
-                </p>
               </div>
-            </div>
-          ))
+            );
+          })
         )}
       </div>
     </div>

@@ -33,5 +33,11 @@ export const api = {
   getUsers: async (): Promise<User[]> => {
     const res = await fetch(`${API_URL}/api/users`);
     return res.json();
+  },
+  // This is now handled by sockets in the real app, 
+  // but we keep the signature if needed for compatibility
+  saveMessage: async (_message: Message) => {
+    // In full-stack mode, we use socket.emit('sendMessage')
+    return { success: true };
   }
 };

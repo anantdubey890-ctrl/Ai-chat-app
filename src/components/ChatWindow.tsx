@@ -81,6 +81,9 @@ export default function ChatWindow({ onBack }: { onBack: () => void }) {
     }
   };
 
+  const otherParticipantId = chat?.participants.find(p => p !== user?.id);
+  const otherName = otherParticipantId ? `User ${otherParticipantId.slice(-4)}` : 'Chat';
+
   return (
     <div className="h-full flex flex-col bg-[#0b141a] relative">
       {/* Header */}
@@ -88,12 +91,12 @@ export default function ChatWindow({ onBack }: { onBack: () => void }) {
         <div className="flex items-center gap-3">
           <ArrowLeft className="w-6 h-6 text-[#aebac1] cursor-pointer md:hidden" onClick={onBack} />
           <img 
-            src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${chatId}`} 
+            src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${otherParticipantId || chatId}`} 
             alt="Chat" 
             className="w-10 h-10 rounded-full"
           />
           <div className="flex flex-col">
-            <h3 className="text-[#e9edef] font-medium leading-tight">Chat with {chatId?.slice(0, 5)}</h3>
+            <h3 className="text-[#e9edef] font-medium leading-tight">{otherName}</h3>
             <span className="text-xs text-[#8696a0]">online</span>
           </div>
         </div>
